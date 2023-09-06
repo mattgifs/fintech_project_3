@@ -8,13 +8,13 @@ import streamlit as st
 load_dotenv()
 
 # Define and connect a new Web3 provider
-w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URI")))
+#w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URI")))
 
 ################################################################################
 # The Load_Contract Function
 ################################################################################
 
-
+'''
 @st.cache_resource()
 def load_contract():
 
@@ -33,22 +33,27 @@ def load_contract():
     return contract
 
 contract = load_contract()
-
+'''
 
 ################################################################################
 # Register New Artwork
 ################################################################################
-st.title("Register New Artwork")
-accounts = w3.eth.accounts
+st.title("Purchase Your Wine Membership")
+#accounts = w3.eth.accounts
+regions = ['Russian River Valley','Napa', 'Champagne', 'Somewhere']
 
 # Use a Streamlit component to get the address of the artwork owner from the user
-address = st.selectbox("Select Artwork Owner", options=accounts)
+#address = st.selectbox("Select Artwork Owner", options=accounts)
+address = st.selectbox("Choose your region:", options=regions)
 
 # Use a Streamlit component to get the artwork's URI
-artwork_uri = st.text_input("The URI to the artwork")
+#artwork_uri = st.text_input("The URI to the artwork")
 
-if st.button("Register Artwork"):
 
+if st.button("Purchase Membership"):
+    st.write(f"Purchase Complete!")
+
+    '''
     # Use the contract to send a transaction to the registerArtwork function
     tx_hash = contract.functions.registerArtwork(
         address,
@@ -57,15 +62,29 @@ if st.button("Register Artwork"):
     receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     st.write("Transaction receipt mined:")
     st.write(dict(receipt))
-
+'''
 st.markdown("---")
 
 
 ################################################################################
 # Display a Token
 ################################################################################
-st.markdown("## Check Balance of an Account")
+#st.markdown("## Check Balance of an Account")
+st.markdown("## Add Your Shipping Information")
 
+st.text_input("First Name")
+st.text_input("Last Name")
+st.text_input("Address Line 1")
+st.text_input("Address Line 2")
+st.text_input("City")
+st.text_input("State")
+st.text_input("ZIP Code")
+
+
+
+
+
+'''
 selected_address = st.selectbox("Select Account", options=accounts)
 
 tokens = contract.functions.balanceOf(selected_address).call()
@@ -77,9 +96,10 @@ st.markdown("## Check  Ownership and Display Token")
 total_token_supply = contract.functions.totalSupply().call()
 
 token_id = st.selectbox("Artwork Tokens", list(range(total_token_supply)))
-
+'''
 if st.button("Display"):
-
+    st.write(f"Thanks for submitting your information and joining our club!")
+    '''
     # Get the art token owner
     owner = contract.functions.ownerOf(token_id).call()
     
@@ -90,4 +110,4 @@ if st.button("Display"):
 
     st.write(f"The tokenURI is {token_uri}")
     st.image(token_uri)
-
+    '''
