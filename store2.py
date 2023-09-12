@@ -5,6 +5,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 import streamlit as st
 
+
+
 load_dotenv()
 
 # Define and connect a new Web3 provider
@@ -109,3 +111,6 @@ if st.button("Display"):
 #    st.write(f"The tokenURI is {token_uri}")
 #    st.image(token_uri)
     
+
+
+        
