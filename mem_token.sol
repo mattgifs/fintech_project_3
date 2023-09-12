@@ -25,8 +25,6 @@ contract MemToken is ERC721Full {
         require(tokenId < totalSupply(), "Token does not exist");
         uint256 traitIndex = tokenToTrait[tokenId];
         Trait memory trait = traits[traitIndex];
-        // Generate a unique tokenURI based on trait information or any other logic you desire
-        // For simplicity, let's assume it's just the concatenation of trait name and tokenId
         return string(abi.encodePacked(trait.name, "-", tokenId));
     }
 
