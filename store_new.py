@@ -78,16 +78,19 @@ if st.button("Get Trait"):
 
 # Mint membership
 if st.button("Purchase Membership"):
-    # Use the contract to send a transaction to the mintMembership function
-    tx_hash = contract.functions.mintMembership(
+    try:
+        # Use the contract to send a transaction to the mintMembership function
+        tx_hash = contract.functions.mintMembership(
         address,
         traitIndex
-    ).transact({'from': address, 'gas': 1000000})
-    receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    st.write("Transaction receipt mined:")
-    st.write(dict(receipt))
-    st.write(f"Purchase Complete!")
-
+        ).transact({'from': address, 'gas': 1000000})
+        receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+        st.write("Transaction receipt mined:")
+        st.write(dict(receipt))
+        st.write(f"Purchase Complete!")
+    except Exception as e:
+        st.error(f"No more memberships of this type!")
+        
 st.markdown("---")
 
 ################################################################################
