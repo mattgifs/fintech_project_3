@@ -4,99 +4,132 @@ from web3 import Web3
 from pathlib import Path
 from dotenv import load_dotenv
 import streamlit as st
-# load_dotenv()
 from PIL import Image
+load_dotenv()
 
 
+###########################################################################
+# Display Images on Streamlit Customer Portal
+###########################################################################
 
-# ###########################################################################
-# # Define and connect a new Web3 provider
-# w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URI")))
+# Display a local image
+st.sidebar.image("./images/wine1.png", use_column_width=True)
+st.sidebar.image("./images/wine2.png", use_column_width=True)
+st.sidebar.image("./images/wine5.png", use_column_width=True)
+    
+    
+# Create six columns
+col1, col2, col3, col4, col5, col6 = st.columns(6)
 
-# ############################################################################ The Load_Contract Function
-# ###########################################################################
-# @st.cache_resource()
-# def load_contract():
+# Display images in columns
+with col1:
+    st.image("./images/wine1.png")
 
-#     # Load the contract ABI
-#     with open(Path('./contracts/compiled/mem_token_abi.json')) as f:
-#         mem_token_abi = json.load(f)
+with col2:
+    st.image("./images/wine2.png")
+    
+with col3:
+    st.image("./images/wine10.png")
+    
+with col4:
+    st.image("./images/wine8.png")
+    
+with col5:
+    st.image("./images/wine9.png")
+    
+with col6:
+    st.image ("./images/wine3.png")
 
-#     contract_address = os.getenv("SMART_CONTRACT_ADDRESS")
+###########################################################################
+# Define and connect a new Web3 provider
+###########################################################################
+w3 = Web3(Web3.HTTPProvider(os.getenv("WEB3_PROVIDER_URI")))
 
-#     # Load the contract
-#     contract = w3.eth.contract(
-#         address=contract_address,
-#         abi=mem_token_abi
-#     )
+###########################################################################
+# The Load_Contract Function
+###########################################################################
+@st.cache_resource()
+def load_contract():
 
-#     return contract
+    # Load the contract ABI
+    with open(Path('./contracts/compiled/mem_token_abi.json')) as f:
+        mem_token_abi = json.load(f)
 
-# contract = load_contract()
+    contract_address = os.getenv("SMART_CONTRACT_ADDRESS")
 
-# ###########################################################################
-# # Define a Python class to represent the Trait struct
-# ###########################################################################
-# class Trait:
-#     def __init__(self, name, value, maxSupply, mintedCount):
-#         self.name = name
-#         self.value = value
-#         self.maxSupply = maxSupply
-#         self.mintedCount = mintedCount
+    # Load the contract
+    contract = w3.eth.contract(
+        address=contract_address,
+        abi=mem_token_abi
+    )
 
-# ################################################################################
-# # Register New Artwork
-# ################################################################################
-# st.title("Purchase Your Wine Membership")
+    return contract
 
-# # Load ganache accounts
-# accounts = w3.eth.accounts
+contract = load_contract()
 
-# # Customer select from ganache accounts
-# address = st.selectbox("Select Your Account", options=accounts)
+###########################################################################
+# Define a Python class to represent the Trait struct
+###########################################################################
+class Trait:
+    def __init__(self, name, value, maxSupply, mintedCount):
+        self.name = name
+        self.value = value
+        self.maxSupply = maxSupply
+        self.mintedCount = mintedCount
 
-# # Define a list of regions (for mockup, replace with contract data)
-# regions = ['Russian River Valley', 'Napa', 'Champagne', 'Somewhere']
+################################################################################
+# Register New Artwork
+################################################################################
+st.title("Purchase Your Wine Membership")
 
-# # Customer select from the list of regions
-# region = st.selectbox("Choose your region:", options=regions)
+# Load ganache accounts
+accounts = w3.eth.accounts
 
-# # Customer selects a trait index (replace with actual trait index options)
-# traitIndex = st.selectbox("Trait Index:", options=[0, 1])
+# Customer select from ganache accounts
+address = st.selectbox("Select Your Account", options=accounts)
 
-# # Get the trait data for the selected traitIndex
-# if st.button("Get Trait"):
-#     selected_trait_index = traitIndex  # Replace this with the selected trait index
-#     try:
-#         trait_data = contract.functions.getMembershipInfo(selected_trait_index).call()
-#         name, value, maxSupply, mintedCount = trait_data
-#         trait = Trait(name, value, maxSupply, mintedCount)
-#         st.write("Trait Data:")
-#         st.write(f"Name: {trait.name}")
-#         st.write(f"Value: {trait.value}")
-#         st.write(f"Max Supply: {trait.maxSupply}")
-#         st.write(f"Spots Remaining: {trait.maxSupply - trait.mintedCount}")
-#     except Exception as e:
-#         st.error(f"Error fetching trait data: {str(e)}")
+# Define a list of regions (for mockup, replace with contract data)
+regions = ['Russian River Valley', 'Napa', 'Champagne', 'Somewhere']
 
-# # Mint membership
-# if st.button("Purchase Membership"):
-#     try:
-#         # Use the contract to send a transaction to the mintMembership function
-#         tx_hash = contract.functions.mintMembership(
-#         address,
-#         traitIndex
-#         ).transact({'from': address, 'gas': 1000000})
-#         receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-#         st.write("Transaction receipt mined:")
-#         st.write(dict(receipt))
-#         st.write(f"Purchase Complete!")
-#     except Exception as e:
-#         st.error(f"No more memberships of this type!")
+# Customer select from the list of regions
+region = st.selectbox("Choose your region:", options=regions)
+
+# Customer selects a trait index (replace with actual trait index options)
+traitIndex = st.selectbox("Trait Index:", options=[0, 1])
+
+# Get the trait data for the selected traitIndex
+if st.button("Get Trait"):
+    selected_trait_index = traitIndex  # Replace this with the selected trait index
+    try:
+        trait_data = contract.functions.getMembershipInfo(selected_trait_index).call()
+        name, value, maxSupply, mintedCount = trait_data
+        trait = Trait(name, value, maxSupply, mintedCount)
+        st.write("Trait Data:")
+        st.write(f"Name: {trait.name}")
+        st.write(f"Value: {trait.value}")
+        st.write(f"Max Supply: {trait.maxSupply}")
+        st.write(f"Spots Remaining: {trait.maxSupply - trait.mintedCount}")
+    except Exception as e:
+        st.error(f"Error fetching trait data: {str(e)}")
+
+# Mint membership
+if st.button("Purchase Membership"):
+    try:
+        # Use the contract to send a transaction to the mintMembership function
+        tx_hash = contract.functions.mintMembership(
+        address,
+        traitIndex
+        ).transact({'from': address, 'gas': 1000000})
+        receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+        st.write("Transaction receipt mined:")
+        st.write(dict(receipt))
+        st.write(f"Purchase Complete!")
+    except Exception as e:
+        st.error(f"No more memberships of this type!")
         
-# st.markdown("---")
+st.markdown("---")
 
-# ################################################################################
+################################################################################
 # Back Office
 ################################################################################
 # Insert shipping address to database/dataframe
@@ -112,38 +145,7 @@ st.text_input("ZIP Code")
 
 if st.button("Display"):
     st.write(f"Thanks for submitting your information and joining our club!")
-    
 
- # Display a local image
-st.sidebar.image("./images/wine1.png", caption="Image Caption", use_column_width=True)
-st.sidebar.image("./images/wine2.png", caption="Image Caption", use_column_width=True)
-st.sidebar.image("./images/wine5.png", caption="Image Caption", use_column_width=True)
-   
-    
-    
-    
-    
-    # Create six columns
-col1, col2, col3, col4, col5, col6 = st.columns(6)
-
- # Display images in columns
-with col1:
-    st.image("./images/wine1.png", caption="Image 1")
-
-with col2:
-    st.image("./images/wine2.png", caption="Image 2")
-    
-with col3:
-    st.image("./images/wine10.png", caption="Image 3")
-    
-with col4:
-    st.image("./images/wine8.png", caption="Image 4")
-    
-with col5:
-    st.image("./images/wine9.png", caption="Image 5")
-    
-with col6:
-    st.image ("./images/wine3.png", caption="Image 6")
     
 # Open the images you want to stack
 # image1 = Image.open("image1/wine1.png")
