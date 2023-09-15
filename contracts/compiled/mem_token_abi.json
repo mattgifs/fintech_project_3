@@ -84,31 +84,6 @@
 		"constant": false,
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "value",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "maxSupply",
-				"type": "uint256"
-			}
-		],
-		"name": "addTrait",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "to",
 				"type": "address"

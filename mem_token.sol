@@ -3,8 +3,6 @@ pragma solidity ^0.5.0;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/token/ERC721/ERC721Full.sol";
 
 contract MemToken is ERC721Full {
-    constructor() public ERC721Full("MemToken", "WINE") {}
-
     struct Trait {
         string name;
         string value;
@@ -14,12 +12,21 @@ contract MemToken is ERC721Full {
 
     Trait[] public traits;
 
+    constructor() public ERC721Full("MemToken", "WINE") {
+        // Initialize the traits array in the constructor
+        traits.push(Trait({name: "Russian River Valley",value: "1",maxSupply: 100,mintedCount: 0}));
+        traits.push(Trait({name: "Napa Valley",value: "2",maxSupply: 100,mintedCount: 0}));
+        traits.push(Trait({name: "Oregon",value: "3",maxSupply: 100,mintedCount: 0}));
+        traits.push(Trait({name: "Columbia Valley",value: "4",maxSupply: 100,mintedCount: 0}));
+        traits.push(Trait({name: "Finger Lakes",value: "5",maxSupply: 100,mintedCount: 0}));                        
+    }
+
     mapping(uint256 => uint256) public tokenToTrait;
     mapping(uint256 => uint256) public mintingTime; // Mapping to store minting timestamps
 
-    function addTrait(string memory name, string memory value, uint256 maxSupply) public {
-        traits.push(Trait(name, value, maxSupply, 0));
-    }
+//    function addTrait(string memory name, string memory value, uint256 maxSupply) public {
+//        traits.push(Trait(name, value, maxSupply, 0));
+//    }
 
     function generateTokenURI(uint256 tokenId) internal view returns (string memory) {
         require(tokenId < totalSupply(), "Token does not exist");
