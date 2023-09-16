@@ -61,15 +61,6 @@ def load_contract():
 
 contract = load_contract()
 
-###########################################################################
-# Define a Python class to represent the Trait struct
-###########################################################################
-class Trait:
-    def __init__(self, name, value, maxSupply, mintedCount):
-        self.name = name
-        self.value = value
-        self.maxSupply = maxSupply
-        self.mintedCount = mintedCount
 
 ################################################################################
 # Register New Artwork
@@ -77,7 +68,7 @@ class Trait:
 st.title("Purchase Your Wine Membership")
 
 # Load ganache accounts
-accounts = w3.eth.accounts
+accounts = w3.eth.accounts[4:]
 
 # Customer select from ganache accounts
 st.sidebar.markdown("## Add Payment Method")
@@ -97,12 +88,16 @@ traitIndex = 0
 
 # Use for loop to call all available traits from the deployed contract
 for ele in list(range(0, 5)):
-    # Call the membership info
+    # Call the membership info by element
     trait_data = contract.functions.getMembershipInfo(ele).call()
     # Save the values to trait_data
-    name, value, maxSupply, mintedCount = trait_data
-    # Format the trait_data for display
-    trait_form = f' {name} | Value: {value} | Remaining Available: {maxSupply - mintedCount}/{maxSupply}'
+    name, Price, maxSupply, mintedCount = trait_data
+    # Call trait price in wei 
+    trait_price_wei = w3.toWei(Price, 'wei')
+    # Convert price to ETH
+    trait_price_eth= w3.fromWei(trait_price_wei, 'ether') 
+    # Format the trait_data for display in dropdown
+    trait_form = f' {name} | Price: {trait_price_eth} ETH | Remaining: {maxSupply - mintedCount}/{maxSupply}'
     # Add the trait_form and the ele (traitIndex) to the mem_options dictionary 
     mem_options[trait_form] = ele
 
@@ -112,7 +107,12 @@ region = st.selectbox("Choose your membership:", options=list(mem_options.keys()
 # Update traitIndex based on the selected option
 traitIndex = mem_options[region]
 
-# Now traitIndex holds the selected value
+# Call trait price in wei for selected traitIndex
+trait_price_wei = w3.toWei(contract.functions.getMembershipInfo(traitIndex).call()[1], 'wei')
+# Convert price to ETH
+trait_price_eth= w3.fromWei(trait_price_wei, 'ether') 
+
+# Write traitIndex (mostly for debugging)
 st.write(f"Selected Membership: {traitIndex}")
 
 
@@ -122,13 +122,15 @@ if st.button("Purchase Membership"):
     try:
         # Use the contract to send a transaction to the mintMembership function
         tx_hash = contract.functions.mintMembership(
-        address,
-        traitIndex
-        ).transact({'from': address, 'gas': 1000000})
+            address,
+            traitIndex
+        ).transact({'from': address, 'gas': 1000000, 'value': trait_price_wei})
         receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-        st.write("Transaction receipt mined:")
-        st.write(dict(receipt))
         st.write(f"Purchase Complete!")
+        
+        st.write("Here is your receipt:")
+        st.write(dict(receipt))
+
     except Exception as e:
         st.error(f"No more memberships of this type!")
         
