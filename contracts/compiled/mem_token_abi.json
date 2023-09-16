@@ -138,6 +138,21 @@
 	},
 	{
 		"constant": true,
+		"inputs": [],
+		"name": "contractOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -174,9 +189,9 @@
 				"type": "string"
 			},
 			{
-				"internalType": "string",
-				"name": "value",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "Price",
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
@@ -210,9 +225,9 @@
 				"type": "string"
 			},
 			{
-				"internalType": "string",
-				"name": "value",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "Price",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -288,8 +303,8 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
-		"stateMutability": "nonpayable",
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -581,9 +596,9 @@
 				"type": "string"
 			},
 			{
-				"internalType": "string",
-				"name": "value",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "Price",
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
