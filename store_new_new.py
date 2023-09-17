@@ -113,7 +113,7 @@ trait_price_wei = w3.toWei(contract.functions.getMembershipInfo(traitIndex).call
 trait_price_eth= w3.fromWei(trait_price_wei, 'ether') 
 
 # Write traitIndex (mostly for debugging)
-st.write(f"Selected Membership: {traitIndex}")
+# st.write(f"Selected Membership: {traitIndex}")
 
 
 
@@ -127,10 +127,11 @@ if st.button("Purchase Membership"):
         ).transact({'from': address, 'gas': 1000000, 'value': trait_price_wei})
         receipt = w3.eth.waitForTransactionReceipt(tx_hash)
         st.write(f"Purchase Complete!")
-        
+        st.markdown(f"Your membership entitles you to receive one bottle of wine from your selected region until the expiration of your membership one year from today.")
+        st.markdown(f"Don't forget to add your shipping information below so we know where to send your wine!")
+        st.markdown("---")
         st.write("Here is your receipt:")
         st.write(dict(receipt))
-        
         
         # Get wei balance, convert to eth, and round to two decimals
         wall_bal_new = float(round(w3.fromWei(w3.eth.get_balance(address), "ether"),2))
@@ -157,7 +158,7 @@ col1.text_input("City")
 col2.text_input("State")
 col3.text_input("ZIP Code")
 
-if st.button("Display"):
+if st.button("Add Your Info"):
     st.write(f"Thanks for submitting your information and joining our club!")
 
 ################################################################################

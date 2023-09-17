@@ -21,15 +21,14 @@ contract MemToken is ERC721Full {
         contractOwner = msg.sender;
 
         // Initialize the traits array in the constructor
-        traits.push(Trait({name: "Russian River Valley", Price: 1 ether, maxSupply: 100, mintedCount: 0}));
-        traits.push(Trait({name: "Napa Valley", Price: 2 ether, maxSupply: 100, mintedCount: 0}));
-        traits.push(Trait({name: "Oregon", Price: 3 ether, maxSupply: 100, mintedCount: 0}));
-        traits.push(Trait({name: "Columbia Valley", Price: 4 ether, maxSupply: 100, mintedCount: 0}));
-        traits.push(Trait({name: "Finger Lakes", Price: 5 ether, maxSupply: 100, mintedCount: 0}));
+        traits.push(Trait({name: "Russian River Valley", Price: 0.2 ether, maxSupply: 100, mintedCount: 0}));
+        traits.push(Trait({name: "Napa Valley", Price: 0.6 ether, maxSupply: 100, mintedCount: 0}));
+        traits.push(Trait({name: "Oregon", Price: 0.3 ether, maxSupply: 100, mintedCount: 0}));
+        traits.push(Trait({name: "Columbia Valley", Price: 0.4 ether, maxSupply: 100, mintedCount: 0}));
+        traits.push(Trait({name: "Finger Lakes", Price: 0.5 ether, maxSupply: 100, mintedCount: 0}));
     }
 
     mapping(uint256 => uint256) public tokenToTrait;
-    mapping(uint256 => uint256) public mintingTime; // Mapping to store minting timestamps
 
     function generateTokenURI(uint256 tokenId) internal view returns (string memory) {
         require(tokenId < totalSupply(), "Token does not exist");
@@ -57,10 +56,9 @@ contract MemToken is ERC721Full {
 
         tokenToTrait[tokenId] = traitIndex;
         trait.mintedCount++;
-        mintingTime[tokenId] = now; // Store the minting timestamp
 
         // Transfer the payment to the contract owner
-        address payable ownerPayable = address(uint160(contractOwner));
+        address payable ownerPayable = address(uint64(contractOwner));
         ownerPayable.transfer(msg.value);
 
         return tokenId;
@@ -78,11 +76,11 @@ contract MemToken is ERC721Full {
         Trait memory trait = traits[traitIndex];
         return (trait.name, trait.Price, trait.maxSupply, trait.mintedCount);
     }
-
-    // Function to check if an NFT has expired
-    function isMembershipExpired(uint256 tokenId) public view returns (bool) {
-        require(tokenId < totalSupply(), "Token does not exist");
-        uint256 mintTime = mintingTime[tokenId];
-        return now >= mintTime + 365 days;
+    function getTotalPaymentReceivedByOwner() public view returns (uint256) {
+        return address(uint64(contractOwner)).balance;
+        }
+    function getTotalPaymentReceivedByContract() public view returns (uint256) {
+        return address(this).balance;
     }
+
 }
