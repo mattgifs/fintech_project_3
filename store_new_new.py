@@ -160,6 +160,7 @@ col3.text_input("ZIP Code")
 
 if st.button("Add Your Info"):
     st.write(f"Thanks for submitting your information and joining our club!")
+    
 
 ################################################################################
 # Display sidebar images
