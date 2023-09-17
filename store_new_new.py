@@ -130,7 +130,13 @@ if st.button("Purchase Membership"):
         
         st.write("Here is your receipt:")
         st.write(dict(receipt))
-
+        
+        
+        # Get wei balance, convert to eth, and round to two decimals
+        wall_bal_new = float(round(w3.fromWei(w3.eth.get_balance(address), "ether"),2))
+        # Write resulting wall_bal
+        st.sidebar.write(f'Your account balance is now:  {wall_bal_new} ETH')
+    
     except Exception as e:
         st.error(f"No more memberships of this type!")
         
@@ -142,13 +148,14 @@ st.markdown("---")
 # Insert shipping address to database/dataframe
 st.markdown("## Add Your Shipping Information")
 
-st.text_input("First Name")
-st.text_input("Last Name")
-st.text_input("Address Line 1")
-st.text_input("Address Line 2")
-st.text_input("City")
-st.text_input("State")
-st.text_input("ZIP Code")
+col1, col2 = st.columns([2,2])
+col1.text_input("First Name") 
+col2.text_input("Last Name")
+st.text_input("Street Address")
+col1,col2,col3 = st.columns([2,1,1])
+col1.text_input("City")
+col2.text_input("State")
+col3.text_input("ZIP Code")
 
 if st.button("Display"):
     st.write(f"Thanks for submitting your information and joining our club!")
