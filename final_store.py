@@ -190,8 +190,8 @@ if st.button("Purchase Membership"):
         
         # Provide Purchase Confirmation to Customer 
         st.write(f"Purchase Complete!")
-        st.markdown(f"Your membership entitles you to receive one bottle of wine from your selected region until the expiration of your membership one year from today.")
-        st.markdown(f"Don't forget to add your shipping information below so we know where to send your wine!")
+        st.markdown(f"Your membership entitles you to receive one bottle of wine per month from your selected region until the expiration of your membership one year from today.")
+
         st.markdown("---")
         st.write("Here is your receipt:")
         st.write(dict(receipt))

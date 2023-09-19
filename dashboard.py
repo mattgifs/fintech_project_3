@@ -22,7 +22,7 @@ query = """
 SELECT * FROM customer_data
 """
 
-# Create a DataFrame from the query result. HINT: Use pd.read_sql(query, engine)
+# Create a DataFrame from the query result.
 df = pd.read_sql(query, engine)
 df.set_index('tx_id',inplace=True)
 
