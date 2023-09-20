@@ -21,6 +21,7 @@
 ## Components & Repo Locations
 - The Smart Contract
     - mem_token_v2.sol
+    - SAMPLE.env is a copy of the .env file we actually used (SAMPLE is visible and commitable)
     - Contract is deployed using Remix IDE
 - The Store Interface
     - final_store.py
