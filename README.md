@@ -50,3 +50,5 @@
     - P2P Membership Transfers - one should be able to transfer their membership to another before its expiration
 
 
+### Note to Future Self
+This requires Ganache to be open, Metamask must be used to deploy the contract, and the abi and env files must be updated each time the contract is compiled and deployed.
